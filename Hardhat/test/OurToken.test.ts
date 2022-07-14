@@ -7,18 +7,21 @@ describe("Goflow", function () {
   let goflow: Contract, owner: SignerWithAddress, otherAccount:SignerWithAddress;
 
   const deployContract = async () => {
-    
     // Contracts are deployed using the first signer/account by default
+    // but we can create multiple user accounts for testing
     const [_owner, _otherAccount] = await ethers.getSigners();
 
-    const Goflow = await ethers.getContractFactory("Goflow");
+    // Make sure the string argument passed to getContractFactory matches
+    // the exact name of your token contract!
+    const Goflow = await ethers.getContractFactory('Goflow');
     goflow = await Goflow.deploy();
 
     owner = _owner;
-    otherAccount = _otherAccount; 
+    otherAccount = _otherAccount;
   }
 
   const mint = async (user: SignerWithAddress, amount: number) => {
+    // We mock different users with the `connect` method
     const tx = await goflow.connect(user).mint(amount);
     await tx.wait();
   }
@@ -55,7 +58,8 @@ describe("Goflow", function () {
       await mint(owner, 100); // owner should start with 100 tokens
       expect(await goflow.balanceOf(owner.address)).to.equal(100);
 
-      // we have to approve the "spender" to access the owner's tokens
+      // first we gotta "approve before we can move"
+      // so the "spender" can access and transfer the owner's tokens!
       const approve = await goflow.approve(otherAccount.address, 100);
       await approve.wait();
       // use the connect method to connect to the otherAccount
@@ -77,5 +81,4 @@ describe("Goflow", function () {
       await expect(goflow.approve(otherAccount.address, 200)).to.be.revertedWith('insufficient balance for approval!');
     });
   });
-
 });
