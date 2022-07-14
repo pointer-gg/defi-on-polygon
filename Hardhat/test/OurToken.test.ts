@@ -23,7 +23,7 @@ describe("Goflow", function () {
     await tx.wait();
   }
 
-  beforeEach( async () => {
+  beforeEach(async () => {
     await deployContract();
   })
 
