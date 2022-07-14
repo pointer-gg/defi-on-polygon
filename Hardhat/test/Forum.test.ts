@@ -1,13 +1,15 @@
 import { expect } from 'chai';
+import { Contract } from 'ethers';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { ethers } from 'hardhat';
-import { makeBig } from '../lib/number-utils';
+import { makeBig } from '../../Front-end/lib/number-utils';
 
 describe('Forum', () => {
-  let goflow;
-  let forum;
-  let owner, user1, user2;
+  let goflow: Contract;
+  let forum: Contract;
+  let owner: SignerWithAddress, user1: SignerWithAddress, user2: SignerWithAddress;
 
-  const postQuestionsAndAnswers = async (user1, user2) => {
+  const postQuestionsAndAnswers = async (user1: SignerWithAddress, user2: SignerWithAddress) => {
     const tx = await forum.connect(user1).postQuestion('are you my fren?');
     await tx.wait();
     const tx2 = await forum.connect(user2).postQuestion('suh?');
