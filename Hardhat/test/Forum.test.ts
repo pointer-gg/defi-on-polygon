@@ -9,6 +9,8 @@ describe('Forum', () => {
   let forum: Contract;
   let owner: SignerWithAddress, user1: SignerWithAddress, user2: SignerWithAddress;
 
+  // We want to post the same question and answers for each test
+  // so we create a function to avoid duplicating code
   const postQuestionsAndAnswers = async (user1: SignerWithAddress, user2: SignerWithAddress) => {
     const tx = await forum.connect(user1).postQuestion('are you my fren?');
     await tx.wait();
@@ -22,6 +24,7 @@ describe('Forum', () => {
   };
 
   beforeEach(async () => {
+    // the getSigners() method allows us a to create mock users
     const [_owner, _user1, _user2] = await ethers.getSigners();
     owner = _owner;
     user1 = _user1;
@@ -36,6 +39,8 @@ describe('Forum', () => {
 
     // Deploy the Forum contract
     const Forum = await ethers.getContractFactory('Forum');
+    // We make sure to pass the address of our ERC20 contract
+    // to the Forum contract's constructor!
     forum = await Forum.deploy(goflow.address);
     await forum.deployed();
   });
@@ -45,14 +50,20 @@ describe('Forum', () => {
       console.log('Forum address: ', forum.address);
       console.log('imported Goflow address: ', await forum.Goflow());
 
-      expect(forum.address).to.exist;
+      // Check that the Goflow contract has been imported
+      // into the Forum contract correctly
       expect(await forum.Goflow()).to.equal(goflow.address);
     });
   });
 
   describe('Posting questions and answers', () => {
     it('should be possible to post a question', async () => {
-      await postQuestionsAndAnswers(user1, user2);
+      // Remember, we use the `connect` method to interact with
+      // our smart contracts as different mock users
+      const tx = await forum.connect(user1).postQuestion('are you my fren?');
+      await tx.wait();
+      const tx2 = await forum.connect(user2).postQuestion('suh?');
+      await tx2.wait();
 
       // console.log('nquestion 0  ', await forum.questions(0));
       // console.log('\nquestion 1 ', await forum.questions(1));
@@ -62,6 +73,7 @@ describe('Forum', () => {
     });
 
     it('should be possible to post a question and answer it', async () => {
+      // Using the utility function we created above
       await postQuestionsAndAnswers(user1, user2);
 
       expect((await forum.answers(0)).message).to.equal('yes, I am');
