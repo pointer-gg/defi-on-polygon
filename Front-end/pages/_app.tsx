@@ -25,14 +25,14 @@ const queryClient = new QueryClient({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <Navbar />
-        <Component {...pageProps} />
-        <Toaster position='bottom-right' />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </ChakraProvider>
+      <ChakraProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <Navbar />
+          <Component {...pageProps} />
+          <Toaster position='bottom-right' />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </ChakraProvider>
   );
 }
 
