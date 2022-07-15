@@ -96,7 +96,7 @@ describe('Forum', () => {
       // mint user1 at least 10 tokens so that they meet requirement to receive tips
       const mintTx2 = await goflow.connect(user1).mint(makeBig(10));
       await mintTx2.wait();
-
+      
       const mintTx3 = await goflow.connect(user2).mint(makeBig(10));
       await mintTx3.wait();
 
