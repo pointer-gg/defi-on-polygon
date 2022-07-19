@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, Center, Spinner, Stack } from '@chakra-ui/react';
 import useQuestions from '../hooks/useQuestions';
 import Question from './Question';
-// import QuestionEditor from './QuestionEditor';
+import QuestionEditor from './QuestionEditor';
 // import useEvents from '../hooks/useEvents';
 
 const Questions: React.FunctionComponent = () => {
@@ -21,7 +21,7 @@ const Questions: React.FunctionComponent = () => {
         {allQuestionsQuery.data?.map((q) => (
           <Question {...q} key={q.questionId.toNumber()} />
         ))}
-        {/* {allQuestionsQuery.isFetched ? <QuestionEditor /> : null} */}
+        {allQuestionsQuery.isFetched && <QuestionEditor />}
       </Stack>
     </Box>
   );

@@ -4,14 +4,13 @@ import { Icon } from '@chakra-ui/react';
 import { FaArrowUp } from 'react-icons/fa';
 import { Button, ButtonProps, Text } from '@chakra-ui/react';
 import { useAccount } from 'wagmi';
-import useForumContract from '../hooks/contracts/useForumContract';
-import useUpvotes from '../hooks/useUpvotes';
 import type { BigNumber } from 'ethers';
-import { ethers } from 'ethers';
-// import { makeBig } from '../lib/number-utils';
-// import useTokenContract from '../hooks/useTokenContract';
-// import toast from 'react-hot-toast';
-// import useAddUpvote from '../hooks/useAddUpvote';
+
+import useUpvotes from '../hooks/useUpvotes';
+import toast from 'react-hot-toast';
+import useForumContract from '../hooks/contracts/useForumContract';
+import useAddApprove from '../hooks/useAddApprove';
+import useAddUpvote from '../hooks/useAddUpvote';
 
 interface UpvoteButtonProps extends ButtonProps {
   answerId: BigNumber;
@@ -19,15 +18,14 @@ interface UpvoteButtonProps extends ButtonProps {
 
 const Upvote: React.FunctionComponent<UpvoteButtonProps> = ({ answerId, ...props }) => {
   const [upvoteCount, setUpvoteCount] = React.useState(0);
-  const [isLoading, setIsLoading] = React.useState(false);
   const { address: account } = useAccount();
-
   const forumContract = useForumContract();
-  // const token = useTokenContract();
-
   const upvotesQuery = useUpvotes({ answerId });
-  // const addUpvoteAndMutate = useAddUpvote();
+  
+  const addApprove = useAddApprove();
+  const addUpvote = useAddUpvote();
 
+  const isLoading = addApprove.isLoading || addUpvote.isLoading;
   const upvoteCountText = upvoteCount === 1 ? '1 Upvote' : `${upvoteCount} Upvotes`;
 
   useEffect(() => {
@@ -40,16 +38,13 @@ const Upvote: React.FunctionComponent<UpvoteButtonProps> = ({ answerId, ...props
   }, [answerId, upvotesQuery.data, upvotesQuery.isFetched]);
 
   const handleClick = async () => {
-    // try {
-    //   setIsLoading(true);
-    //   await token.approve(upvotesContract.contract.address, makeBig(1));
-    //   await addUpvoteAndMutate.mutateAsync({ answerId });
-    //   setIsLoading(false);
-    //   toast.success(`Upvoted!`);
-    // } catch (e) {
-    //   toast.error(e.data?.message || e.message);
-    //   setIsLoading(false);
-    // }
+    try {
+      await addApprove.mutateAsync({ address: forumContract.contract.address, amount: '1' });
+      await addUpvote.mutateAsync({ answerId });
+      toast.success('Upvoted!');
+    } catch (e: any) {
+      toast.error(e.data?.message || e.message);
+    }
   };
 
   return (
