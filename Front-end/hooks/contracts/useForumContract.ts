@@ -5,6 +5,12 @@ import type { BigNumber } from "ethers";
 // The hardhat compiler writes this file to artifacts every time we run `npx hardhat`.
 import ForumContract from '../../../Hardhat/artifacts/contracts/Forum.sol/Forum.json';
 
+export enum ForumEvent {
+  QuestionAdded = 'QuestionAdded',
+  AnswerAdded = 'AnswerAdded',
+  AnswerUpvoted = 'AnswerUpvoted',
+}
+
 export interface Question {
   questionId: BigNumber;
   message: string;
