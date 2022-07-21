@@ -4,6 +4,11 @@ import { makeNum } from '../../lib/number-utils';
 import type { BigNumber } from 'ethers';
 import GoflowContract from '../../../Hardhat/artifacts/contracts/OurToken.sol/Goflow.json';
 
+export enum TokenEvent {
+  Transfer = 'Transfer',
+  Mint = 'Mint',
+}
+
 export type Amount = BigNumber;
 
 const useGoflowContract = () => {
