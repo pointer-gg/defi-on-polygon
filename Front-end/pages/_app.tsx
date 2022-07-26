@@ -10,19 +10,12 @@ import { WagmiConfig, createClient } from 'wagmi';
 import { providers } from 'ethers';
 
 // Use wagmi to configure the provider.
-// Right now, we will only connect to hardhat's standalone localhost network
-const localhostProvider = new providers.JsonRpcProvider('http://localhost:8545', {
-  name: 'dev',
-  chainId: 1337,
-  ensAddress: undefined,
-});
+const quicknodeProvider = new providers.JsonRpcProvider('<YOUR-QUICKNODE-POLYGON-URL>');
 // Give wagmi our provider config and allow it to autoconnect wallet
 const client = createClient({
   autoConnect: true,
-  provider: localhostProvider,
+  provider: quicknodeProvider,
 });
-
-console.log('client provider: ', localhostProvider);
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -37,7 +37,7 @@ const useForumContract = () => {
   // We need to pass in the address of our deployed contract as well as its abi.
   const contract = wagmi.useContract({
     // Add the address that was output from your deploy script
-    addressOrName: '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853',
+    addressOrName: '0x1Bd7ba264a48F128C9Afdb381A9Ed48A01e8929B',
     contractInterface: ForumContract.abi,
     signerOrProvider: signer || provider,
   });
